@@ -2,13 +2,19 @@ package _Drive.example._Drive.Entities;
 
 import _Drive.example._Drive.Entities.Enums.PaymentMethod;
 import _Drive.example._Drive.Entities.Enums.PaymentStatus;
-import com.sun.jdi.event.StepEvent;
+import _Drive.example._Drive.Entities.Enums.TransactionMethod;
+import _Drive.example._Drive.Entities.Enums.TransactionType;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 public class WalletTransaction {
     @Id
@@ -18,10 +24,11 @@ public class WalletTransaction {
     private Double amount;
 
     @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod;
+    private TransactionMethod transactionMethod;
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
+    private TransactionType transactionType;
     @ManyToOne
     private Wallet wallet;
     @OneToOne

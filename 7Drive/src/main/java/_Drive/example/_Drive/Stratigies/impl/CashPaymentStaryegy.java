@@ -1,6 +1,7 @@
 package _Drive.example._Drive.Stratigies.impl;
 
 import _Drive.example._Drive.Entities.Driver;
+import _Drive.example._Drive.Entities.Enums.TransactionMethod;
 import _Drive.example._Drive.Entities.Payment;
 import _Drive.example._Drive.Repository.PaymentRepository;
 import _Drive.example._Drive.Service.WalletService;
@@ -19,6 +20,7 @@ public class CashPaymentStaryegy implements PaymentStrategy {
     public void processPayment(Payment payment) {
         Driver driver = payment.getRide().getDriver();
         double platformCommission = payment.getAmount()*PLATFORM_COMMISSION;
-        walletService.
+        walletService.deductMoneyfromWallet(driver.getUser(),platformCommission,
+                payment.getRide(), TransactionMethod.Ride);
     }
 }

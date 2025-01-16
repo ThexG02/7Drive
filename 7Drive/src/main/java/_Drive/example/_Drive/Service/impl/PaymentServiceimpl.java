@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentServiceimpl implements PaymentService {
     private final PaymentRepository paymentRepository;
-    private final Paymen
+
     @Override
     public void processPayment(Ride ride) {
 
