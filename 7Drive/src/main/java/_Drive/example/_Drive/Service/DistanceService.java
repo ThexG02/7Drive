@@ -6,6 +6,5 @@ import org.locationtech.jts.geom.Point;
 public interface DistanceService {
     Double calcDistance(Point src , Point Dist);
 
-    interface AuthService {
-    }
+
 }

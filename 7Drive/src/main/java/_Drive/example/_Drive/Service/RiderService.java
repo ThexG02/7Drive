@@ -7,6 +7,8 @@ import _Drive.example._Drive.Dto.RiderDto;
 import _Drive.example._Drive.Entities.Ride;
 import _Drive.example._Drive.Entities.Rider;
 import _Drive.example._Drive.Entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -19,13 +21,13 @@ public interface RiderService {
     RideDto cancleride(Long rideid);
 
     // driver rating service
-    DriverDto ratedriver (Long driverid, Double rating);
+    DriverDto ratedriver (Long driverid, Integer rating);
 
     //profile servies
     RiderDto getMyProfile();
 
     //previous rides list
-    List<RideDto> getAllMyRides();
+    Page<RideDto> getAllMyRides(PageRequest pageRequest);
 
     //creation of the NEW USER
     Rider createNewRider(User user);

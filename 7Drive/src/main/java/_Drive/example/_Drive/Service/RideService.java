@@ -5,6 +5,7 @@ import _Drive.example._Drive.Entities.Driver;
 import _Drive.example._Drive.Entities.Enums.RideStatus;
 import _Drive.example._Drive.Entities.Ride;
 import _Drive.example._Drive.Entities.RideRequest;
+import _Drive.example._Drive.Entities.Rider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -17,7 +18,7 @@ public interface RideService {
 
     Ride updateRideStatus(Ride ride, RideStatus rideStatus);
 
-    Page<Ride> getAllRidesOfRider(Long riderId, PageRequest pageRequest);
+    Page<Ride> getAllRidesOfRider(Rider rider, PageRequest pageRequest);
 
     Page<Ride> getAllRidesOfDriver(Driver driverId, PageRequest pageRequest);
     

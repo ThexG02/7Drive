@@ -26,9 +26,9 @@ public class RideServiceimpl implements RideService {
     private final RideRequestService rideRequestService;
     private final ModelMapper modelMapper;
     @Override
-    public Rider getRideById(Long rideId) {
+    public Ride getRideById(Long rideId) {
          return rideRepository.findById(rideId)
-                 .orElseThrow(()-> new ResourceNotFoundException("ride not found with id"+rideId)).getRider();
+                 .orElseThrow(()-> new ResourceNotFoundException("ride not found with id"+rideId));
     }
 
     @Override
@@ -56,13 +56,15 @@ public class RideServiceimpl implements RideService {
     }
 
     @Override
-    public Page<Ride> getAllRidesOfRider(Long riderId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRidesOfRider(Rider rider, PageRequest pageRequest) {
+        return rideRepository.findByRider(rider,pageRequest);
     }
 
+
     @Override
-    public Page<Ride> getAllRidesOfDriver(Driver driverId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRidesOfDriver(Driver driver, PageRequest pageRequest) {
+        return rideRepository.findByDriver(driver, pageRequest);
+
     }
     private String generateRandomOTP() {
         Random random = new Random();
