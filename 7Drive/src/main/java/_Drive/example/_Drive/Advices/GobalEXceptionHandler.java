@@ -1,7 +1,8 @@
 package _Drive.example._Drive.Advices;
 
+import _Drive.example._Drive.Exceptions.ResourceNotFoundException;
 import _Drive.example._Drive.Exceptions.RuntimeConflictException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
