@@ -14,7 +14,7 @@ class ApplicationTests {
 	@Test
 	void contextLoads() {
 		emailSenderService.sendEmail(
-				"harsh2020bhardwaj@gmail.com",
+				"abcd@gmail.com",
 				"testing email",
 				"testing email for 7 drive");
 	}
