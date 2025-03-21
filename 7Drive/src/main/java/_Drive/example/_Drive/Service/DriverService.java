@@ -19,7 +19,7 @@ public interface DriverService {
     RideDto endride(Long rideid);
 
     //Rating service for the driver to rate the drive
-    RiderDto raterider(Long Riderid , Double  rating);
+    RiderDto raterider(Long Ridid , Double  rating);
 
     //profile service for the driver
     DriverDto getmyprofile();
@@ -31,6 +31,7 @@ public interface DriverService {
 
      Driver updateDriverAvailability(Driver driver , boolean available);
 
+     Driver createNewDriver(Driver driver);
 
 
 }

@@ -8,6 +8,7 @@ import _Drive.example._Drive.Entities.Enums.RideRequestStatus;
 import _Drive.example._Drive.Entities.Enums.RideStatus;
 import _Drive.example._Drive.Entities.Ride;
 import _Drive.example._Drive.Entities.RideRequest;
+import _Drive.example._Drive.Entities.User;
 import _Drive.example._Drive.Exceptions.ResourceNotFoundException;
 import _Drive.example._Drive.Repository.DriverRepository;
 import _Drive.example._Drive.Service.*;
@@ -15,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +30,8 @@ public class DriverServiceimpl implements DriverService {
     private final RideService rideService;
     private final ModelMapper modelMapper;
     private final PaymentService paymentService;
+    private final RatingService ratingService;
+
 
 
     @Override
@@ -52,8 +57,8 @@ public class DriverServiceimpl implements DriverService {
     }
     @Override
     public Driver getCurrentDriver() {
-        return driverRepository.findById(2L).orElseThrow(()-> new ResourceNotFoundException("Driver not found with "+
-            "id"+2    ));
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return driverRepository.findByUser(user);
     }
 
 
@@ -104,8 +109,14 @@ public class DriverServiceimpl implements DriverService {
         return driverRepository.save(driver);
     }
 
+    @Override
+    public Driver createNewDriver(Driver driver) {
+        return driverRepository.save(driver);
+    }
+
 
     @Override
+    @Transactional
     public RideDto endride(Long rideid) {
         Ride ride = rideService.getRideById(rideid);
         Driver driver = getCurrentDriver();
@@ -123,8 +134,17 @@ public class DriverServiceimpl implements DriverService {
     }
 
     @Override
-    public RiderDto raterider(Long Riderid, Double rating) {
-        return null;
+    public RiderDto raterider(Long rideId, Double rating) {
+        Ride ride = rideService.getRideById(rideId);
+        Driver driver = getCurrentDriver();
+        if(!driver.equals(ride.getDriver())){
+            throw new RuntimeException("Driver is not on Drive");
+        }
+        if(!ride.getRideStatus().equals(RideStatus.ended)){
+            throw new RuntimeException("Ride status is not ended , please wait for the ride to end to rate the driver");
+        }
+
+        return ratingService.rateRider(ride,rating);
     }
 
     @Override
@@ -140,7 +160,9 @@ public class DriverServiceimpl implements DriverService {
         return rideService.getAllRidesOfDriver(currentDriver,pageRequest).map(
                 ride-> modelMapper.map(ride, RideDto.class)
         );
+
     }
+
 
 
 }

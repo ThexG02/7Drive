@@ -14,6 +14,7 @@ import _Drive.example._Drive.Exceptions.ResourceNotFoundException;
 import _Drive.example._Drive.Repository.RideRequestRepository;
 import _Drive.example._Drive.Repository.RiderRepository;
 import _Drive.example._Drive.Service.DriverService;
+import _Drive.example._Drive.Service.RatingService;
 import _Drive.example._Drive.Service.RideService;
 import _Drive.example._Drive.Service.RiderService;
 import _Drive.example._Drive.Stratigies.CalculateFare;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,7 @@ public class RiderServicesimpl implements RiderService {
     private final RiderRepository riderRepository;
     private final RideService rideService;
     private final DriverService driverService;
+    private final RatingService ratingService;
     @Override
     @Transactional
     public RideRequestDto requestride(RideRequestDto rideRequestDto) {
@@ -89,8 +92,17 @@ public class RiderServicesimpl implements RiderService {
     }
 
     @Override
-    public DriverDto ratedriver(Long driverid, Integer rating) {
-        return null;
+    public DriverDto ratedriver(Long rideId, Double rating) {
+        Ride ride = rideService.getRideById(rideId);
+        Rider rider= getcurrntRider();
+        if(!rider.equals(ride.getRider())){
+            throw new RuntimeException("Rider is not the Part of the Ride");
+        }
+        if(!ride.getRideStatus().equals(RideStatus.ended)){
+            throw new RuntimeException("ride Status is not ended  , please wait till ride end");
+        }
+
+        return ratingService.rateDriver(ride,rating);
     }
 
 
@@ -121,9 +133,9 @@ public class RiderServicesimpl implements RiderService {
 
     @Override
     public Rider getcurrntRider() {
-        // TODO : implement Spring Security
-        return riderRepository.findById(1L).orElseThrow(()-> new ResourceNotFoundException(
-                "Rider with id :"+1+"+is not found"
+       User user =(User) SecurityContextHolder.getContext().getAuthentication();
+        return riderRepository.findByUser(user).orElseThrow(()-> new ResourceNotFoundException(
+                "Rider not associated with user with id: "+user.getId()
         ));
     }
 }

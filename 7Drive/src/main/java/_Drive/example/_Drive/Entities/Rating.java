@@ -28,6 +28,6 @@ public class Rating {
     @ManyToOne
     private Driver driver;
 
-    private Integer driverRating; //rating for the driver
-    private Integer riderRating; //rating for the rider
+    private Double driverRating; //rating for the driver
+    private Double riderRating; //rating for the rider
 }

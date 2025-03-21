@@ -8,6 +8,7 @@ import org.locationtech.jts.geom.Point;
 @Entity
 @Getter
 @Setter
+@Builder
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

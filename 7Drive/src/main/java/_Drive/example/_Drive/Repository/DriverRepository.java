@@ -1,6 +1,7 @@
 package _Drive.example._Drive.Repository;
 
 import _Drive.example._Drive.Entities.Driver;
+import _Drive.example._Drive.Entities.User;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,4 +33,5 @@ public interface DriverRepository extends JpaRepository<Driver,Long > {
                     "LIMIT 10 " , nativeQuery = true)
     List<Driver> findTenTopRatedNearbyDrivers(Point pickupLocation);
 
+    Driver findByUser(User user);
 }
